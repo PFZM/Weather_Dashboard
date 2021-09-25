@@ -1,0 +1,73 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 10px;
+}
+
+h1 {
+  font-size: 3em;
+}
+h2 {
+  font-size: 2em;
+}
+
+body {
+  font-family: "EB Garamond", serif;
+  background-color: antiquewhite;
+}
+
+header {
+  text-align: center;
+  font-size: 2rem;
+  background-image: linear-gradient(
+    to right,
+    rgba(31, 29, 74, 0),
+    rgba(31, 29, 74, 1)
+  );
+  height: 13rem;
+  border-bottom: 5px solid black;
+}
+
+main {
+  padding: 2rem 3rem;
+  display: flex;
+  justify-content: space-around;
+}
+.display-cities {
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+}
+
+.form-input {
+  display: block;
+  width: 100%;
+  height: 3rem;
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+}
+.btn {
+  width: 100%;
+  display: block;
+  height: 3rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+.btn:hover {
+  background-color: rgb(132, 126, 199);
+}
+
+#storage-cities {
+  margin-top: 2rem;
+  border-top: solid grey;
+  padding-bottom: 2rem;
+}
+
+.display-weather {
+  width: 70%;
+  border-style: dotted;
+}
