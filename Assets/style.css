@@ -9,14 +9,17 @@ html {
 }
 
 h1 {
-  font-size: 3em;
+  font-size: 5rem;
 }
 h2 {
-  font-size: 2em;
+  font-size: 2rem;
+}
+h3 {
+  font-size: 1.8rem;
 }
 
 p {
-  font-size: 1.5em;
+  font-size: 1.5rem;
 }
 
 body {
@@ -54,6 +57,7 @@ main {
   margin: 1rem 0;
   border-radius: 0.5rem;
 }
+
 .btn {
   width: 100%;
   display: block;
@@ -61,14 +65,29 @@ main {
   border-radius: 0.5rem;
   cursor: pointer;
 }
+
 .btn:hover {
-  background-color: rgb(132, 126, 199);
+  background-color: rgba(35, 46, 63, 0.255);
 }
 
 #storage-cities {
   margin-top: 2rem;
   border-top: solid grey;
   padding-bottom: 2rem;
+}
+
+.btn-cities {
+  margin: 0.8em 0;
+  background-color: olive;
+  width: 100%;
+  display: block;
+  height: 3rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-cities:hover {
+  background-color: rgba(35, 46, 63, 0.255);
 }
 
 .display-weather {
@@ -80,6 +99,7 @@ main {
   width: 100%;
   border-style: dotted;
   padding-left: 2em;
+  padding-bottom: 1em;
 }
 
 #actual-weather h2 {
@@ -91,7 +111,7 @@ main {
 }
 
 #actual-UVindex {
-  display: block;
+  display: inline;
 }
 
 .icon-image {
@@ -99,7 +119,7 @@ main {
 }
 
 .favorable {
-  display: inline-block;
+  display: inline;
   height: 2em;
   width: 2.8em;
   border-radius: 20%;
@@ -108,7 +128,7 @@ main {
 }
 
 .moderate {
-  display: inline-block;
+  display: inline;
   height: 2em;
   width: 2.8em;
   border-radius: 20%;
@@ -117,7 +137,7 @@ main {
 }
 
 .severe {
-  display: inline-block;
+  display: inline;
   height: 2em;
   width: 2.8em;
   border-radius: 20%;
@@ -125,8 +145,25 @@ main {
   background-color: red;
 }
 
+#title-forecast {
+  display: none;
+}
+
 #forecast {
   padding: 1em 0;
   font-size: 1.8em;
   display: flex;
+  justify-content: space-evenly;
+}
+
+.day {
+  margin: 0 0.5em;
+  padding: 0.5em 1em;
+  background-color: rgb(57, 105, 121);
+}
+
+.icon-forecast-image {
+  display: inline;
+  height: 4em;
+  width: 4em;
 }
