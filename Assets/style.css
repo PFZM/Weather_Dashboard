@@ -15,9 +15,13 @@ h2 {
   font-size: 2em;
 }
 
+p {
+  font-size: 1.5em;
+}
+
 body {
   font-family: "EB Garamond", serif;
-  background-color: antiquewhite;
+  background-color: rgb(156, 142, 124);
 }
 
 header {
@@ -69,5 +73,60 @@ main {
 
 .display-weather {
   width: 70%;
+  padding-left: 2em;
+}
+
+#actual-weather {
+  width: 100%;
   border-style: dotted;
+  padding-left: 2em;
+}
+
+#actual-weather h2 {
+  display: inline;
+}
+
+#actual-weather p {
+  padding: 0.2em 0;
+}
+
+#actual-UVindex {
+  display: block;
+}
+
+.icon-image {
+  display: inline;
+}
+
+.favorable {
+  display: inline-block;
+  height: 2em;
+  width: 2.8em;
+  border-radius: 20%;
+  text-align: center;
+  background-color: green;
+}
+
+.moderate {
+  display: inline-block;
+  height: 2em;
+  width: 2.8em;
+  border-radius: 20%;
+  text-align: center;
+  background-color: yellow;
+}
+
+.severe {
+  display: inline-block;
+  height: 2em;
+  width: 2.8em;
+  border-radius: 20%;
+  text-align: center;
+  background-color: red;
+}
+
+#forecast {
+  padding: 1em 0;
+  font-size: 1.8em;
+  display: flex;
 }
