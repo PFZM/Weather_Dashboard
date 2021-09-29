@@ -95,7 +95,7 @@ main {
   padding-left: 2em;
 }
 
-#actual-weather {
+.current-weather {
   width: 100%;
   border-style: dotted;
   padding-left: 2em;
@@ -103,7 +103,9 @@ main {
 }
 
 #actual-weather h2 {
-  display: inline;
+  display: flex;
+  align-items: center;
+  font-size: 3rem;
 }
 
 #actual-weather p {

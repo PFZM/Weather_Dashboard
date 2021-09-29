@@ -1,12 +1,12 @@
 const currentDate = document.querySelector("#date");
 const searchBtn = document.querySelector("#search-button");
 const cityInput = document.querySelector("#city");
+const actualWeather = document.querySelector("#actual-weather");
 const actualCityDate = document.querySelector("#city-date");
 const actualTemp = document.querySelector("#actual-temp");
 const actualWind = document.querySelector("#actual-wind");
 const actualHumid = document.querySelector("#actual-humidity");
 const actualUV = document.querySelector("#actual-UVindex");
-const numberUV = document.querySelector("#UV-number");
 const searchedCities = document.querySelector("#storage-cities");
 const forecastDis = document.querySelector("#forecast");
 const titleFor = document.querySelector("#title-forecast");
@@ -22,8 +22,10 @@ function displayDate() {
 }
 setInterval(displayDate, 1000);
 
+// Event listeners
 searchBtn.addEventListener("click", searchCity);
 
+// Function to retrieve the city from the form and call back for retrieve the weather
 function searchCity(event) {
   event.preventDefault();
 
@@ -35,10 +37,11 @@ function searchCity(event) {
   city = cityInput.value;
   console.log(city);
 
-  retrieveWeather(city);
+  retrieveWeather(city, true);
 }
 
-function retrieveWeather(city) {
+// Fetch to weather API to retrieve information for the city
+function retrieveWeather(city, createBtn) {
   const queryURL =
     "http://api.openweathermap.org/data/2.5/weather?q=" +
     city +
@@ -54,7 +57,9 @@ function retrieveWeather(city) {
       response.json().then(function (data) {
         console.log(data);
         displayWeather(data);
-        storageCities(data);
+        if (createBtn) {
+          storageCities(data);
+        }
       });
     })
     .catch(function (error) {
@@ -62,7 +67,10 @@ function retrieveWeather(city) {
     });
 }
 
+// Display current weather
 function displayWeather(data) {
+  actualWeather.className = "current-weather";
+
   const cityDate = data.name + " (" + moment().format("DD-MM-YYYY") + ") ";
   const iconWeatherUrl =
     "http://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png";
@@ -101,6 +109,8 @@ function displayWeather(data) {
         console.log(currentUvIndex);
         actualUV.textContent = "UV Index: ";
 
+        const numberUV = document.createElement("span");
+
         numberUV.textContent = currentUvIndex;
 
         if (currentUvIndex < 2) {
@@ -110,51 +120,12 @@ function displayWeather(data) {
           numberUV.className = "moderate";
         }
         if (currentUvIndex > 8) {
-          numberUV.className = "favorable";
+          numberUV.className = "severe";
         }
 
-        titleFor.style.display = "block";
+        actualUV.appendChild(numberUV);
 
-        let i = 1;
-
-        for (let day = 0; day < 5; day++) {
-          const dayForecast = document.createElement("div");
-          dayForecast.className = "day";
-
-          const dateForecast = document.createElement("h3");
-          dayForecast.textContent = moment()
-            .add(i, "days")
-            .format("DD-MM-YYYY");
-          dayForecast.appendChild(dateForecast);
-
-          const iconForeWeatherUrl =
-            "http://openweathermap.org/img/wn/" +
-            dataOne.daily[i].weather[0].icon +
-            "@2x.png";
-
-          const iconForecast = document.createElement("img");
-          iconForecast.className = "icon-forecast-image";
-          iconForecast.src = iconForeWeatherUrl;
-          dayForecast.appendChild(iconForecast);
-
-          const tempForecast = document.createElement("p");
-          tempForecast.textContent =
-            "Temp: " + dataOne.daily[i].temp.max + " °C";
-          dayForecast.appendChild(tempForecast);
-
-          const windForecast = document.createElement("p");
-          windForecast.textContent =
-            "Wind: " + dataOne.daily[i].wind_speed + " Km/h";
-          dayForecast.appendChild(windForecast);
-
-          const humidityForecast = document.createElement("p");
-          humidityForecast.textContent =
-            "Humidity: " + dataOne.daily[i].humidity + "%";
-          dayForecast.appendChild(humidityForecast);
-
-          forecastDis.appendChild(dayForecast);
-          i++;
-        }
+        fiveDayFor(dataOne);
       });
     })
     .catch(function (error) {
@@ -162,24 +133,77 @@ function displayWeather(data) {
     });
 }
 
+function fiveDayFor(dataOne) {
+  titleFor.style.display = "block";
+
+  forecastDis.innerHTML = "";
+
+  let i = 1;
+
+  for (let day = 0; day < 5; day++) {
+    const dayForecast = document.createElement("div");
+    dayForecast.className = "day";
+
+    const dateForecast = document.createElement("h3");
+    dayForecast.textContent = moment().add(i, "days").format("DD-MM-YYYY");
+    dayForecast.appendChild(dateForecast);
+
+    const iconForeWeatherUrl =
+      "http://openweathermap.org/img/wn/" +
+      dataOne.daily[i].weather[0].icon +
+      "@2x.png";
+
+    const iconForecast = document.createElement("img");
+    iconForecast.className = "icon-forecast-image";
+    iconForecast.src = iconForeWeatherUrl;
+    dayForecast.appendChild(iconForecast);
+
+    const tempForecast = document.createElement("p");
+    tempForecast.textContent = "Temp: " + dataOne.daily[i].temp.max + " °C";
+    dayForecast.appendChild(tempForecast);
+
+    const windForecast = document.createElement("p");
+    windForecast.textContent = "Wind: " + dataOne.daily[i].wind_speed + " Km/h";
+    dayForecast.appendChild(windForecast);
+
+    const humidityForecast = document.createElement("p");
+    humidityForecast.textContent =
+      "Humidity: " + dataOne.daily[i].humidity + "%";
+    dayForecast.appendChild(humidityForecast);
+
+    forecastDis.appendChild(dayForecast);
+    i++;
+  }
+}
+
+// Store the searched city in local storage and add button for searched cities sectioin
 function storageCities(data) {
   listOfCities.unshift(data.name);
   localStorage.setItem("Cities", JSON.stringify(listOfCities));
   const cityBt = document.createElement("button");
   cityBt.className = "btn-cities";
   cityBt.textContent = listOfCities[0];
+  cityBt.onclick = function () {
+    console.log(data.name);
+    retrieveWeather(data.name, false);
+  };
   searchedCities.appendChild(cityBt);
 }
 
+// Retrieve information from local storage when refreshing the browser to the last search.
 function displayStgCities() {
   if (listOfCities.length != 0) {
     for (let i = 0; i < listOfCities.length; i++) {
       const cityBt = document.createElement("button");
       cityBt.className = "btn-cities";
       cityBt.textContent = listOfCities[i];
+      cityBt.onclick = function () {
+        console.log(listOfCities[i]);
+        retrieveWeather(listOfCities[i], false);
+      };
       searchedCities.appendChild(cityBt);
     }
-    retrieveWeather(listOfCities[0]);
+    retrieveWeather(listOfCities[0], false);
   }
   return;
 }
