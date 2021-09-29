@@ -149,7 +149,7 @@ function fiveDayFor(dataOne) {
     dayForecast.appendChild(dateForecast);
 
     const iconForeWeatherUrl =
-      "http://openweathermap.org/img/wn/" +
+      "https://openweathermap.org/img/wn/" +
       dataOne.daily[i].weather[0].icon +
       "@2x.png";
 
