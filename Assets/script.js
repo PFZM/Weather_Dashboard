@@ -43,7 +43,7 @@ function searchCity(event) {
 // Fetch to weather API to retrieve information for the city
 function retrieveWeather(city, createBtn) {
   const queryURL =
-    "http://api.openweathermap.org/data/2.5/weather?q=" +
+    "https://api.openweathermap.org/data/2.5/weather?q=" +
     city +
     "&units=metric" +
     "&appid=" +
@@ -73,7 +73,7 @@ function displayWeather(data) {
 
   const cityDate = data.name + " (" + moment().format("DD-MM-YYYY") + ") ";
   const iconWeatherUrl =
-    "http://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png";
+    "https://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png";
 
   const iconWeather = document.createElement("img");
   iconWeather.className = "icon-image";
