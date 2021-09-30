@@ -106,29 +106,31 @@ function displayWeather(data) {
     .then(function (response) {
       if (!response.ok) {
         alert("Error: " + response.statusText);
+        return;
       }
-      response.json().then(function (dataOne) {
-        const currentUvIndex = dataOne.current.uvi;
-        actualUV.textContent = "UV Index: ";
+      return response.json();
+    })
+    .then(function (dataOne) {
+      const currentUvIndex = dataOne.current.uvi;
+      actualUV.textContent = "UV Index: ";
 
-        const numberUV = document.createElement("span");
+      const numberUV = document.createElement("span");
 
-        numberUV.textContent = currentUvIndex;
+      numberUV.textContent = currentUvIndex;
 
-        if (currentUvIndex < 2) {
-          numberUV.className = "favorable";
-        }
-        if (3 < currentUvIndex < 7) {
-          numberUV.className = "moderate";
-        }
-        if (currentUvIndex > 8) {
-          numberUV.className = "severe";
-        }
+      if (currentUvIndex < 2) {
+        numberUV.className = "favorable";
+      }
+      if (3 < currentUvIndex < 7) {
+        numberUV.className = "moderate";
+      }
+      if (currentUvIndex > 8) {
+        numberUV.className = "severe";
+      }
 
-        actualUV.appendChild(numberUV);
+      actualUV.appendChild(numberUV);
 
-        fiveDayFor(dataOne);
-      });
+      fiveDayFor(dataOne);
     })
     .catch(function (error) {
       alert("Unable to retrieve data");
