@@ -12,8 +12,14 @@ const forecastDis = document.querySelector("#forecast");
 const titleFor = document.querySelector("#title-forecast");
 
 const APIKey = "fc1547c6c6eac0f4c70827baceb61b94";
-let city;
-const listOfCities = JSON.parse(localStorage.getItem("Cities")) || [];
+
+function getCitiesFromLocalStorage() {
+  return JSON.parse(localStorage.getItem("cities")) || [];
+}
+
+function setCitiesInLocalStorage(cities) {
+  localStorage.setItem("cities", JSON.stringify(cities));
+}
 
 // function to display current date
 function displayDate() {
@@ -34,10 +40,7 @@ function searchCity(event) {
     return;
   }
 
-  city = cityInput.value;
-  console.log(city);
-
-  retrieveWeather(city, true);
+  retrieveWeather(cityInput.value, true);
 }
 
 // Fetch to weather API to retrieve information for the city
@@ -53,14 +56,15 @@ function retrieveWeather(city, createBtn) {
     .then(function (response) {
       if (!response.ok) {
         alert("Error: " + response.statusText + "\nPlease check the city name");
+        return;
       }
-      response.json().then(function (data) {
-        console.log(data);
-        displayWeather(data);
-        if (createBtn) {
-          storageCities(data);
-        }
-      });
+      return response.json();
+    })
+    .then(function (data) {
+      displayWeather(data);
+      if (createBtn) {
+        storageCities(data);
+      }
     })
     .catch(function (error) {
       alert("Unable to retrieve data");
@@ -104,9 +108,7 @@ function displayWeather(data) {
         alert("Error: " + response.statusText);
       }
       response.json().then(function (dataOne) {
-        console.log(dataOne);
         const currentUvIndex = dataOne.current.uvi;
-        console.log(currentUvIndex);
         actualUV.textContent = "UV Index: ";
 
         const numberUV = document.createElement("span");
@@ -178,33 +180,32 @@ function fiveDayFor(dataOne) {
 
 // Store the searched city in local storage and add button for searched cities sectioin
 function storageCities(data) {
+  const listOfCities = getCitiesFromLocalStorage();
   listOfCities.unshift(data.name);
-  localStorage.setItem("Cities", JSON.stringify(listOfCities));
+  setCitiesInLocalStorage(listOfCities);
   const cityBt = document.createElement("button");
   cityBt.className = "btn-cities";
   cityBt.textContent = listOfCities[0];
   cityBt.onclick = function () {
-    console.log(data.name);
     retrieveWeather(data.name, false);
   };
-  searchedCities.appendChild(cityBt);
+  searchedCities.prepend(cityBt);
 }
 
 // Retrieve information from local storage when refreshing the browser to the last search.
 function displayStgCities() {
-  if (listOfCities.length != 0) {
-    for (let i = 0; i < listOfCities.length; i++) {
-      const cityBt = document.createElement("button");
-      cityBt.className = "btn-cities";
-      cityBt.textContent = listOfCities[i];
-      cityBt.onclick = function () {
-        console.log(listOfCities[i]);
-        retrieveWeather(listOfCities[i], false);
-      };
-      searchedCities.appendChild(cityBt);
-    }
-    retrieveWeather(listOfCities[0], false);
+  const cities = getCitiesFromLocalStorage();
+
+  for (let i = 0; i < cities.length; i++) {
+    const cityBt = document.createElement("button");
+    cityBt.className = "btn-cities";
+    cityBt.textContent = cities[i];
+    cityBt.onclick = function () {
+      retrieveWeather(cities[i], false);
+    };
+    searchedCities.appendChild(cityBt);
   }
-  return;
+
+  if (cities.length !== 0) retrieveWeather(cities[0], false);
 }
 displayStgCities();
