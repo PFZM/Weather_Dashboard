@@ -43,6 +43,17 @@ function searchCity(event) {
   retrieveWeather(cityInput.value, true);
 }
 
+// Check if the city that was searched is already in local storage.
+function isCityInLocalStorage(city) {
+  const citiesInLocalStorage = getCitiesFromLocalStorage();
+
+  for (let i = 0; i < citiesInLocalStorage.length; i++) {
+    if (city.toLowerCase() === citiesInLocalStorage[i].toLowerCase()) {
+      return true;
+    }
+  }
+  return false;
+}
 // Fetch to weather API to retrieve information for the city
 function retrieveWeather(city, createBtn) {
   const queryURL =
@@ -62,6 +73,11 @@ function retrieveWeather(city, createBtn) {
     })
     .then(function (data) {
       displayWeather(data);
+
+      // check if city is already in localstorage, is yes we should not store
+      if (isCityInLocalStorage(city)) {
+        return;
+      }
       if (createBtn) {
         storageCities(data);
       }
@@ -142,19 +158,17 @@ function fiveDayFor(dataOne) {
 
   forecastDis.innerHTML = "";
 
-  let i = 1;
-
-  for (let day = 0; day < 5; day++) {
+  for (let day = 1; day < 6; day++) {
     const dayForecast = document.createElement("div");
     dayForecast.className = "day";
 
     const dateForecast = document.createElement("h3");
-    dayForecast.textContent = moment().add(i, "days").format("DD-MM-YYYY");
+    dayForecast.textContent = moment().add(day, "days").format("DD-MM-YYYY");
     dayForecast.appendChild(dateForecast);
 
     const iconForeWeatherUrl =
       "https://openweathermap.org/img/wn/" +
-      dataOne.daily[i].weather[0].icon +
+      dataOne.daily[day].weather[0].icon +
       "@2x.png";
 
     const iconForecast = document.createElement("img");
@@ -163,24 +177,24 @@ function fiveDayFor(dataOne) {
     dayForecast.appendChild(iconForecast);
 
     const tempForecast = document.createElement("p");
-    tempForecast.textContent = "Temp: " + dataOne.daily[i].temp.max + " °C";
+    tempForecast.textContent = "Temp: " + dataOne.daily[day].temp.max + " °C";
     dayForecast.appendChild(tempForecast);
 
     const windForecast = document.createElement("p");
-    windForecast.textContent = "Wind: " + dataOne.daily[i].wind_speed + " Km/h";
+    windForecast.textContent =
+      "Wind: " + dataOne.daily[day].wind_speed + " Km/h";
     dayForecast.appendChild(windForecast);
 
     const humidityForecast = document.createElement("p");
     humidityForecast.textContent =
-      "Humidity: " + dataOne.daily[i].humidity + "%";
+      "Humidity: " + dataOne.daily[day].humidity + "%";
     dayForecast.appendChild(humidityForecast);
 
     forecastDis.appendChild(dayForecast);
-    i++;
   }
 }
 
-// Store the searched city in local storage and add button for searched cities sectioin
+// Store the searched city in local storage and add button for searched cities section
 function storageCities(data) {
   const listOfCities = getCitiesFromLocalStorage();
   listOfCities.unshift(data.name);
@@ -208,6 +222,8 @@ function displayStgCities() {
     searchedCities.appendChild(cityBt);
   }
 
-  if (cities.length !== 0) retrieveWeather(cities[0], false);
+  if (cities.length !== 0) {
+    retrieveWeather(cities[0], false);
+  }
 }
 displayStgCities();
