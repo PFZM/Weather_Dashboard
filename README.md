@@ -25,7 +25,7 @@ Follow link to Deployed Application https://pfzm.github.io/Weather_Dashboard/
 
 ## Usage
 
-![The weather app includes a search option, a list of cities, and a five-day forecast and current weather conditions for the city that was searched.](./assets/gif/Weather_dashboard.gif)
+![The weather app includes a search option, a list of cities, and a five-day forecast and current weather conditions for the city that was searched.](./Assets/Gif/Weather_dashboard.gif)
 
 ## License
 
